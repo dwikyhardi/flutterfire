@@ -23,7 +23,7 @@ import java.util.HashMap;
 abstract class JobIntentService extends Service {
   static final String TAG = "JobIntentService";
 
-  static final boolean DEBUG = false;
+  static final boolean DEBUG = true;
 
   CompatJobEngine mJobImpl;
   WorkEnqueuer mCompatWorkEnqueuer;
@@ -178,7 +178,7 @@ abstract class JobIntentService extends Service {
       implements JobIntentService.CompatJobEngine {
     static final String TAG = "JobServiceEngineImpl";
 
-    static final boolean DEBUG = false;
+    static final boolean DEBUG = true;
 
     final JobIntentService mService;
     final Object mLock = new Object();

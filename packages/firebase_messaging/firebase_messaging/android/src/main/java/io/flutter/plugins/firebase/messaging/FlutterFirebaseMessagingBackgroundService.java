@@ -31,6 +31,10 @@ public class FlutterFirebaseMessagingBackgroundService extends JobIntentService 
   public static void enqueueMessageProcessing(Context context, Intent messageIntent) {
     RemoteMessage message = (RemoteMessage) messageIntent.getExtras().get("notification");
 
+    android.util.Log.d(TAG, "enqueueMessageProcessing: message message.getData() "+ message.getData());
+    android.util.Log.d(TAG, "enqueueMessageProcessing: message message.getFrom() "+ message.getFrom());
+    android.util.Log.d(TAG, "<==============><==============><==============><==============>");
+
     enqueueWork(
         context,
         FlutterFirebaseMessagingBackgroundService.class,
@@ -138,6 +142,7 @@ public class FlutterFirebaseMessagingBackgroundService extends JobIntentService 
    */
   @Override
   protected void onHandleWork(@NonNull final Intent intent) {
+    android.util.Log.d(TAG, "onHandleWork: Awal");
     if (!flutterBackgroundExecutor.isDartBackgroundHandlerRegistered()) {
       Log.w(
           TAG,
@@ -149,6 +154,7 @@ public class FlutterFirebaseMessagingBackgroundService extends JobIntentService 
     // intent to the queue and return.
     synchronized (messagingQueue) {
       if (flutterBackgroundExecutor.isNotRunning()) {
+        android.util.Log.d(TAG, "onHandleWork: flutterBackgroundExecutor.isNotRunning()");
         Log.i(TAG, "Service has not yet started, messages will be queued.");
         messagingQueue.add(intent);
         return;
@@ -161,7 +167,7 @@ public class FlutterFirebaseMessagingBackgroundService extends JobIntentService 
     new Handler(getMainLooper())
         .post(
             () -> flutterBackgroundExecutor.executeDartCallbackInBackgroundIsolate(intent, latch));
-
+    android.util.Log.d(TAG, "onHandleWork: flutterBackgroundExecutor.executeDartCallbackInBackgroundIsolate");
     try {
       latch.await();
     } catch (InterruptedException ex) {

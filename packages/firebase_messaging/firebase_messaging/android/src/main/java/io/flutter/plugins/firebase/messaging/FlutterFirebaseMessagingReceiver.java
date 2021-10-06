@@ -8,8 +8,11 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
+
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
+
 import com.google.firebase.messaging.RemoteMessage;
+
 import java.util.HashMap;
 
 public class FlutterFirebaseMessagingReceiver extends BroadcastReceiver {
@@ -19,6 +22,7 @@ public class FlutterFirebaseMessagingReceiver extends BroadcastReceiver {
   @Override
   public void onReceive(Context context, Intent intent) {
     Log.d(TAG, "broadcast received for message");
+    Log.d(TAG, "Is Foreground ======= " + FlutterFirebaseMessagingUtils.isApplicationForeground(context));
     if (ContextHolder.getApplicationContext() == null) {
       ContextHolder.setApplicationContext(context.getApplicationContext());
     }
@@ -30,6 +34,7 @@ public class FlutterFirebaseMessagingReceiver extends BroadcastReceiver {
       notifications.put(remoteMessage.getMessageId(), remoteMessage);
       FlutterFirebaseMessagingStore.getInstance().storeFirebaseMessage(remoteMessage);
     }
+    Log.d(TAG, "RemoteMessage ======= " + FlutterFirebaseMessagingUtils.isApplicationForeground(context) + " <==============> " + remoteMessage.getData());
 
     //  |-> ---------------------
     //      App in Foreground
@@ -45,10 +50,10 @@ public class FlutterFirebaseMessagingReceiver extends BroadcastReceiver {
     //    App in Background/Quit
     //   ------------------------
     Intent onBackgroundMessageIntent =
-        new Intent(context, FlutterFirebaseMessagingBackgroundService.class);
+      new Intent(context, FlutterFirebaseMessagingBackgroundService.class);
     onBackgroundMessageIntent.putExtra(
-        FlutterFirebaseMessagingUtils.EXTRA_REMOTE_MESSAGE, remoteMessage);
+      FlutterFirebaseMessagingUtils.EXTRA_REMOTE_MESSAGE, remoteMessage);
     FlutterFirebaseMessagingBackgroundService.enqueueMessageProcessing(
-        context, onBackgroundMessageIntent);
+      context, onBackgroundMessageIntent);
   }
 }

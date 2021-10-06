@@ -70,6 +70,7 @@ class FirebaseMessaging extends FirebasePluginPlatform {
   /// anonymous otherwise an [ArgumentError] will be thrown.
   // ignore: use_setters_to_change_properties
   static void onBackgroundMessage(BackgroundMessageHandler handler) {
+    debugPrint('Calling On Background');
     FirebaseMessagingPlatform.onBackgroundMessage = handler;
   }
 

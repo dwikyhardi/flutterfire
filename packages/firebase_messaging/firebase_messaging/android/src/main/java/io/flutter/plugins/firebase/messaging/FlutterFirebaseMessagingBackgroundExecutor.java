@@ -223,6 +223,7 @@ public class FlutterFirebaseMessagingBackgroundExecutor implements MethodCallHan
    * corresponds to a callback registered with the Dart VM.
    */
   public void executeDartCallbackInBackgroundIsolate(Intent intent, final CountDownLatch latch) {
+    android.util.Log.d(TAG, "executeDartCallbackInBackgroundIsolate: ");
     if (backgroundFlutterEngine == null) {
       Log.i(
           TAG,
